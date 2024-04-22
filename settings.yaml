@@ -1,0 +1,100 @@
+logpath: ""
+load: "./logs/_1124_171703.log/best_model.pt"
+benchmark: "camus" #['camus','acdc']
+
+COMMON:
+  log_dir: logs
+  dist_url: tcp://127.0.0.1:6789
+  dist_backend: "nccl"
+  distributed: False
+  world_size: 1
+  rank: 1
+  use_apex: False
+  opt_level: "O0"
+  keep_batchnorm_fp32:
+  loss_scale:
+  fold: 0 #no use
+  visualize: True
+  use_original_imgsize: False
+  seed_deterministic: True
+  result_path: r"./result/"
+  img_size: 224
+  device_ids: [0]
+  load:
+
+NETWORK:
+  shot: 5
+  num_class: 2
+  num_channels: 1
+  num_filters: 64
+  img_size: 224
+  kernel_h: 5
+  kernel_w: 5
+  kernel_c: 1
+  stride_conv: 1
+  pool: 2
+  stride_pool: 2
+  se_block: SSE #Valid options : NONE, CSE, SSE, CSSE
+  drop_out: 0
+  layers: 50
+  vgg: False
+  aux_weight1: 1.0
+  aux_weight2: 1.0
+  # low_fea: 'layer2'  # low_fea for computing the Gram matrix
+  kshot_trans_dim: 2 # K-shot dimensionality reduction
+  merge: "final" # fusion scheme for GFSS ('base' Eq(S1) | 'final' Eq(18) )
+  merge_tau: 0.9 # fusion threshold tau
+  zoom_factor: 8 # zoom factor for final prediction during training, be in [1, 2, 4, 8]
+  data_set: "coco"
+  ignore_label: 255
+
+DATA:
+  data_root:
+  train_list:
+  val_list:
+  classes: 2
+  # datapath: '/home/sunsong/0-dataset/CAMUS/train/'
+  backbone: "resnet50" #choices=['vgg16', 'resnet50', 'resnet101']
+
+TRAIN:
+  datapath: "/home/sunsong/0-dataset/LV/A4C/train/"
+  batch_size: 10
+  lr: 0.001
+  workers: 6
+  niter: 1000
+  # Aug
+  train_h: 641
+  train_w: 641
+  val_size: 641
+  scale_min: 0.8 # minimum random scale
+  scale_max: 1.25 # maximum random scale
+  rotate_min: -10 # minimum random rotate
+  rotate_max: 10 # maximum random rotate
+  padding_label: 255
+  # Dataset & Mode
+  use_split_coco: True # True means FWB setting
+  base_lr: 0.005
+  epochs: 50
+  start_epoch: 0
+  stop_interval: 75 # stop when the best result is not updated for "stop_interval" epochs
+  index_split: -1 # index for determining the params group with 10x learning rate
+  power: 0.9 # 0 means no decay
+  momentum: 0.9
+  weight_decay: 0.0001
+  warmup: False
+  save_freq: 5
+  resume: # path to latest checkpoint (default: none, such as epoch_10.pth)
+  # Else
+  fix_bn: True
+  manual_seed: 321
+  seed_deterministic: False
+
+EVAL:
+  datapath: "/home/sunsong/0-dataset/Myo/val/"
+  workers: 4
+  batch_size: 10
+# /home/sunsong/0-dataset/LA(A4C)/test/
+TEST:
+  datapath: "/home/sunsong/0-dataset/Myo/test/"
+  workers: 4
+  batch_size: 10
