@@ -1,5 +1,5 @@
 logpath: ""
-load: "./logs/_1124_171703.log/best_model.pt"
+load: 
 benchmark: "camus" #['camus','acdc']
 
 COMMON:
@@ -23,7 +23,7 @@ COMMON:
   load:
 
 NETWORK:
-  shot: 5
+  shot: 1
   num_class: 2
   num_channels: 1
   num_filters: 64
@@ -57,7 +57,7 @@ DATA:
   backbone: "resnet50" #choices=['vgg16', 'resnet50', 'resnet101']
 
 TRAIN:
-  datapath: "/home/sunsong/0-dataset/LV/A4C/train/"
+  datapath: "XX/train/"
   batch_size: 10
   lr: 0.001
   workers: 6
@@ -90,11 +90,11 @@ TRAIN:
   seed_deterministic: False
 
 EVAL:
-  datapath: "/home/sunsong/0-dataset/Myo/val/"
+  datapath: "XX/Myo/val/"
   workers: 4
   batch_size: 10
 # /home/sunsong/0-dataset/LA(A4C)/test/
 TEST:
-  datapath: "/home/sunsong/0-dataset/Myo/test/"
+  datapath: "XX/Myo/test/"
   workers: 4
   batch_size: 10
